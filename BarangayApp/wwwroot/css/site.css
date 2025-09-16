@@ -1,0 +1,143 @@
+html {
+    font-size: 14px;
+    height: 100%; 
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; 
+}
+
+footer {
+    border-top: 1px solid #ccc;
+    padding: 15px 0;
+    min-height: 60px;
+    display: flex;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(135deg, #c6f6d5 0%, #d9f0a3 15%, #f6e05e 100%);
+    color: #1a202c;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 1050;
+    padding: 20px;
+}
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .sidebar .brand {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .sidebar .brand img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .sidebar .brand span {
+            font-weight: bold;
+            font-size: 18px;
+            color: black;
+        }
+
+    /* Sidebar links */
+    .sidebar a {
+        display: block;
+        padding: 10px 0;
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+        .sidebar a:hover {
+            background: #f1f1f1;
+            border-radius: 5px;
+            padding-left: 10px;
+            transition: all 0.2s ease-in-out;
+        }
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 1040;
+    display: none;
+}
+
+    .overlay.active {
+        display: block;
+    }
+
+.menu-toggle {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Navbar Gradient Color */
+.bg-lightgreen {
+    background: linear-gradient( 135deg, #2f855a 0%, #48bb78 50%, #f6e05e 100%);
+    color: white;
+}
+
+/* Nav item Pill */
+.pill-link {
+    background-color: rgba(255, 255, 255, 0.9); 
+    color: #2f855a !important; 
+    border-radius: 50px;
+    padding: 6px 15px;
+    margin: 0 5px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+    .pill-link:hover {
+        background-color: white; 
+        color: #22543d !important; 
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }

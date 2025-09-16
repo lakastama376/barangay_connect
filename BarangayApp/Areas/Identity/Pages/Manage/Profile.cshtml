@@ -1,0 +1,247 @@
+﻿@page
+@model BarangayApp.Areas.Identity.Pages.Manage.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-7">
+        <div class="card shadow-sm border-0 mb-3">
+            <div class="card-body d-flex align-items-center justify-content-between"
+                 style="background-color: rgba(0, 100, 0, 0.7); backdrop-filter: blur(2px); color:#fff; border:2px solid #ffd633; border-radius:6px;">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center me-3"
+                         style="width:80px; height:80px; font-size:30px; font-weight:bold; background-color:#ffd633; color:black; border:3px solid white;">
+                        @{
+                            var initials = $"{(string.IsNullOrEmpty(Model.Input?.FirstName) ? "U" : Model.Input.FirstName[0].ToString())}";
+                        }
+                        @initials.ToUpper()
+                    </div>
+                    <div>
+                        <div class="h4 mb-0">@($"{Model.Input?.FirstName} {Model.Input?.LastName}")</div>
+                        <small>
+                            @(User.IsInRole("Admin") ? "Admin" : User.IsInRole("Staff") ? "Barangay Staff" : "Resident")
+                        </small>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" id="editBtn" class="btn btn-light btn-sm">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" style="background-color:#90ee90; color:#004d00; border:1px solid #66bb66;">
+                @Model.StatusMessage
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <!-- Personal Information -->
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-8 d-flex">
+                <div class="card shadow-sm border-0 w-100">
+                    <div class="card-header bg-white">
+                        <strong>Personal Information</strong>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-page-handler="Save" id="profileForm">
+                            <fieldset id="profileFields" disabled>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.FirstName" class="form-label"></label>
+                                        <input asp-for="Input.FirstName" class="form-control" />
+                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.MiddleName" class="form-label"></label>
+                                        <input asp-for="Input.MiddleName" class="form-control" />
+                                        <span asp-validation-for="Input.MiddleName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.LastName" class="form-label"></label>
+                                        <input asp-for="Input.LastName" class="form-control" />
+                                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Input.Address" class="form-label"></label>
+                                    <input asp-for="Input.Address" class="form-control" />
+                                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.Gender" class="form-label"></label>
+                                        <select asp-for="Input.Gender" class="form-select">
+                                            <option value="" disabled selected>-- Select Gender --</option>
+                                            <option value="Male" selected="@(Model.Input?.Gender == "Male")">Male</option>
+                                            <option value="Female" selected="@(Model.Input?.Gender == "Female")">Female</option>
+                                        </select>
+                                        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.Age" class="form-label"></label>
+                                        <input asp-for="Input.Age" class="form-control" type="number" min="13" max="120" />
+                                        <span asp-validation-for="Input.Age" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <div class="d-flex gap-2 mt-2">
+                                <button type="submit" id="saveBtn" class="btn btn-success" style="background-color:#006400; border:1px solid #004d00; display:none;"> Save Changes </button>
+                                <button type="button" id="cancelBtn" class="btn btn-secondary" style="display:none;">Cancel</button>
+                            </div>
+                        </form>
+
+                        <!-- Certificate -->
+                        @if (!string.IsNullOrEmpty(Model.CurrentCertificatePath))
+                        {
+                            <div class="mt-3">
+                                <label class="form-label">Barangay Certificate</label><br />
+                                <button type="button" class="btn btn-success btn-sm"
+                                        style="background-color:#006400; border:1px solid #004d00; color:#fff;"
+                                        data-bs-toggle="modal" data-bs-target="#certificateModal">
+                                    <i class="bi bi-eye"></i> View Certificate
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Security -->
+            <div class="col-lg-4 d-flex">
+                <div class="card shadow-sm border-0 w-100 h-100">
+                    <div class="card-header bg-white">
+                        <strong>Account Security</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#emailModal">Change Email</button>
+                            <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#passwordModal">Change Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Certificate Modal -->
+<div class="modal fade" id="certificateModal" tabindex="-1" aria-labelledby="certificateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-success bg-opacity-50 text-dark">
+                <h5 class="modal-title" id="certificateModalLabel">Barangay Certificate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-light d-flex justify-content-center align-items-center">
+                <img src="@Model.CurrentCertificatePath" alt="Certificate" class="img-fluid"
+                     style="border: 1px solid #90ee90; border-radius: 6px; max-height: 600px;" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Email Modal -->
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="ChangeEmail">
+                <div class="modal-header bg-success bg-opacity-50 text-dark">
+                    <h5 class="modal-title" id="emailModalLabel">Change Email</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <div class="mb-3">
+                        <label class="form-label">New Email</label>
+                        <input name="NewEmail" type="email" class="form-control" required/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Update Email</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Password Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="ChangePassword">
+                <div class="modal-header bg-success bg-opacity-50 text-dark">
+                    <h5 class="modal-title" id="passwordModalLabel">Change Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <input name="CurrentPassword" type="password" class="form-control" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input name="NewPassword" type="password" class="form-control" required minlength="6"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirm New Password</label>
+                        <input name="ConfirmPassword" type="password" class="form-control" required minlength="6"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body, html {
+        overflow-x: hidden;
+    }
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Uploads/Images/background.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    footer {
+        display: none;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const editBtn = document.getElementById('editBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const fields = document.getElementById('profileFields');
+        const form = document.getElementById('profileForm');
+
+        editBtn.addEventListener('click', () => {
+            fields.disabled = false;
+            saveBtn.style.display = '';
+            cancelBtn.style.display = '';
+            editBtn.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            fields.disabled = true;
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            editBtn.style.display = '';
+            form.reset();
+        });
+    </script>
+}

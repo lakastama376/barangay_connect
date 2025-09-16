@@ -1,0 +1,65 @@
+﻿body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Background */
+body {
+    background: url('/Uploads/Images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.login-logout-card {
+    width: 500px; 
+    margin: 80px auto; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    border-radius: 10px;
+}
+
+    /* Tab navigation */
+    .login-logout-card .card-header {
+        padding: 0px 0px 15px 0px;
+        border-bottom: none;
+        background: transparent; 
+    }
+
+    .login-logout-card ul.nav-tabs {
+        margin: 0px 0px -12px 0px;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .login-logout-card li.nav-item {
+        width: 50%;
+    }
+
+    .login-logout-card a.nav-link {
+        font-size: 1.1rem;
+        color: #495057;
+        text-align: center;
+        padding: 1.0rem; 
+        border: none;
+        border-radius: 12px 12px 0 0;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .login-logout-card a.nav-link.active {
+            background-color: #90ee90;
+            color: #333;
+            font-weight: 600;
+            border-bottom: 2px solid #90ee90;
+        }
+
+        .login-logout-card a.nav-link:hover {
+            background-color: #e6f0ff;
+            color: #90ee90;
+        }
+
+    /* Card body */
+    .login-logout-card .card-body {
+        padding: 10px; 
+        background: rgba(255, 255, 255, 0.7); 
+        border-radius: 0 0 15px 15px;
+    }
+

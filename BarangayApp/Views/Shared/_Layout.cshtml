@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Barangay Connect</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Barangay_App.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-lightgreen border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <button class="menu-toggle text-white" id="menuToggle">☰</button>
+                <a class="navbar-brand d-flex align-items-center text-white" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/Uploads/Images/logo.png" alt="Logo" style="height:40px; width:40px; margin-right:8px;" />
+                    <img src="~/Uploads/Images/logoname.png" alt="Barangay Connect" style="height:40px;" />
+                </a>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link pill-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link pill-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar -->
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <div class="sidebar" id="sidebar">
+            <div class="brand">
+                <img src="~/Uploads/Images/logo.png" alt="Logo" />
+                <span>Barangay Connect</span>
+            </div>
+            <a asp-area="" asp-page="/Index">Dashboard</a>
+            <a asp-area="Identity" asp-page="/Manage/SendRequest">Send Request</a>
+            <a asp-area="Identity" asp-page="/Manage/RequestUpdates">Request Updates</a>
+            <a asp-area="Identity" asp-page="/Manage/Profile">Account</a>
+        </div>
+        <div class="overlay" id="overlay"></div>
+    }
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+        </main>
+    <footer class="border-top footer text-muted" style="background-color: #2b7a56; padding: 20px;">
+        <div class="container" style="color: white;">
+            &copy; 2025 - Barangay Connect - <a href="/Home/Privacy" style="color: white;">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        const menuToggle = document.getElementById("menuToggle");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+
+        menuToggle.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
+            overlay.classList.toggle("active");
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
